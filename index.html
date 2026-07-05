@@ -24,11 +24,11 @@
 
       // Load the model only once
       if (!window.classifier) {
-        document.getElementById('output').innerText = "Loading model, please wait...";
-        // Use a smaller English model for faster loading
+        document.getElementById('output').innerText = "Loading multilingual model, please wait...";
+        // Multilingual DistilBERT (supports Filipino, English, and many others)
         window.classifier = await pipeline(
           "sentiment-analysis",
-          "Xenova/distilbert-base-uncased-finetuned-sst-2-english"
+          "distilbert-base-multilingual-cased"
         );
       }
 
