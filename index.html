@@ -11,7 +11,6 @@
   <textarea id="inputText" rows="4" cols="50" placeholder="Type your message here..."></textarea><br><br>
   <button onclick="window.runModel()">Analyze</button>
 
-
   <h3>Result:</h3>
   <pre id="output"></pre>
 
@@ -19,23 +18,26 @@
   <script type="module">
     import { pipeline } from "https://cdn.jsdelivr.net/npm/@xenova/transformers";
 
-    let classifier;
-
-    async function runModel() {
+    // Attach function to window so button can find it
+    window.runModel = async function() {
       const inputText = document.getElementById('inputText').value;
 
       // Load the model only once
-      if (!classifier) {
+      if (!window.classifier) {
         document.getElementById('output').innerText = "Loading model, please wait...";
-        classifier = await pipeline("sentiment-analysis", "distilbert-base-multilingual-cased");
+        // Use a smaller English model for faster loading
+        window.classifier = await pipeline(
+          "sentiment-analysis",
+          "Xenova/distilbert-base-uncased-finetuned-sst-2-english"
+        );
       }
 
       // Run the model
-      const result = await classifier(inputText);
+      const result = await window.classifier(inputText);
 
       // Show the result nicely
       document.getElementById('output').innerText = JSON.stringify(result, null, 2);
-    }
+    };
   </script>
 </body>
 </html>
