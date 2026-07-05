@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>SafeSpace App</title>
+</head>
+<body>
+  <h1>SafeSpace Demo</h1>
+  <p>Type a message below and click Analyze:</p>
+
+  <textarea id="inputText" rows="4" cols="50" placeholder="Type your message here..."></textarea><br><br>
+  <button onclick="runModel()">Analyze</button>
+
+  <h3>Result:</h3>
+  <pre id="output"></pre>
+
+  <!-- Load Transformers.js directly from CDN -->
+  <script type="module">
+    import { pipeline } from "https://cdn.jsdelivr.net/npm/@xenova/transformers";
+
+    let classifier;
+
+    async function runModel() {
+      const inputText = document.getElementById('inputText').value;
+
+      // Load the model only once
+      if (!classifier) {
+        document.getElementById('output').innerText = "Loading model, please wait...";
+        classifier = await pipeline("sentiment-analysis", "distilbert-base-multilingual-cased");
+      }
+
+      // Run the model
+      const result = await classifier(inputText);
+
+      // Show the result nicely
+      document.getElementById('output').innerText = JSON.stringify(result, null, 2);
+    }
+  </script>
+</body>
+</html>
