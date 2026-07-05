@@ -12,20 +12,18 @@
   <button onclick="window.runModel()">Analyze</button>
 
   <h3>Result:</h3>
-  <pre id="output"></pre>
+  <p id="output"></p>
 
   <!-- Load Transformers.js directly from CDN -->
   <script type="module">
     import { pipeline } from "https://cdn.jsdelivr.net/npm/@xenova/transformers";
 
-    // Attach function to window so button can find it
     window.runModel = async function() {
       const inputText = document.getElementById('inputText').value;
 
       // Load the model only once
       if (!window.classifier) {
         document.getElementById('output').innerText = "Loading multilingual sentiment model, please wait...";
-        // Multilingual model with ONNX support
         window.classifier = await pipeline(
           "sentiment-analysis",
           "Xenova/bert-base-multilingual-uncased-sentiment"
@@ -35,8 +33,10 @@
       // Run the model
       const result = await window.classifier(inputText);
 
-      // Show the result nicely
-      document.getElementById('output').innerText = JSON.stringify(result, null, 2);
+      // Format the output: show label + confidence
+      const label = result[0].label.toUpperCase();
+      const score = (result[0].score * 100).toFixed(2);
+      document.getElementById('output').innerText = `Sentiment: ${label} (Confidence: ${score}%)`;
     };
   </script>
 </body>
