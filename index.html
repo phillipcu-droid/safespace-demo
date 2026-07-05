@@ -24,11 +24,11 @@
 
       // Load the model only once
       if (!window.classifier) {
-        document.getElementById('output').innerText = "Loading multilingual model, please wait...";
-        // Multilingual DistilBERT (supports Filipino, English, and many others)
+        document.getElementById('output').innerText = "Loading multilingual sentiment model, please wait...";
+        // Multilingual model with ONNX support
         window.classifier = await pipeline(
           "sentiment-analysis",
-          "distilbert-base-multilingual-cased"
+          "Xenova/bert-base-multilingual-uncased-sentiment"
         );
       }
 
